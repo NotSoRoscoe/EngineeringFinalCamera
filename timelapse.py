@@ -155,6 +155,9 @@ while True:
                 menu_cycle = menu_cycler(menu_cycle, len(show_time_intervals))
                 break
 
+            elif button_b.was_pressed():
+                break
+
         while True:
             display.scroll(show_durations[menu_cycle])
             total_time = time_choices[menu_cycle]
