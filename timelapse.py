@@ -86,7 +86,7 @@ def take_photos(interval, total, panorama):
             sleep(200)
             display.clear()
             sleep(interval)
-
+    return
 
 #  ------------------ Function to Increment Menu Number -----------------------
 #
