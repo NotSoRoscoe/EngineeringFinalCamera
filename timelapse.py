@@ -81,12 +81,19 @@ def take_photos(interval, total, panorama):
                 angle += interval
 
     else:
-        for pic in range(photo_number):
-            # pin0.write_digital(1)  # TODO undo Comment. Delete next 3 lines.
-            display.show(Image.HAPPY)
-            sleep(200)
-            display.clear()
+        pin0.write_digital(1)
+        sleep(50)
+        pin0.write_digital(0)
+        for pic in range(photo_number - 1):
             sleep(interval)
+            pin0.write_digital(1)
+            sleep(50)
+            pin0.write_digital(0)
+            display.show(Image.HAPPY)
+            sleep(5)
+            display.clear()
+        pin0.write_digital(1)
+
 
 
 #  ------------------ Function to Increment Menu Number -----------------------
@@ -127,7 +134,7 @@ while True:
                 time_interval = time_choices[menu_cycle]
                 continue
 
-            elif button_b.is_pressed():
+            if button_b.was_pressed():
                 menu_cycle = 0
                 break
 
@@ -139,12 +146,12 @@ while True:
                 total_time = duration_choices[menu_cycle]
                 continue
 
-            elif button_b.was_pressed():
+            if button_b.was_pressed():
                 break
 
         while True:
             take_photos(time_interval, total_time, False)
-            display.scroll("all done")
+            display.scroll("ALL DONE")
             display.clear()
             sleep(1000)
             break
