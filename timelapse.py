@@ -151,7 +151,7 @@ while True:
 
         while True:
             take_photos(time_interval, total_time, False)
-            display.scroll("all done")
+            display.scroll("ALL DONE")
             display.clear()
             sleep(1000)
             break
