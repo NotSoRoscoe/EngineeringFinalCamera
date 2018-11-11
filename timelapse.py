@@ -95,7 +95,6 @@ def take_photos(interval, total, panorama):
         pin0.write_digital(1)
 
 
-
 #  ------------------ Function to Increment Menu Number -----------------------
 #
 #                  This is super simple placeholder menu
