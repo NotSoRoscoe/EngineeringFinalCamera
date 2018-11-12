@@ -12,15 +12,15 @@ time_choices = {0: 1000,  # 01 second
                 8: 90000}  # 90 seconds
 
 # Dictionary Timelapse Interval Strings to Display
-show_time_intervals = {0: '1 SEC',
-                       1: '2 SEC',
-                       2: '5 SEC',
-                       3: '10 SEC',
-                       4: '15 SEC',
-                       5: '30 SEC',
-                       6: '45 SEC',
-                       7: '60 SEC',
-                       8: '90 SEC'}
+show_times = {0: '1 SEC',
+              1: '2 SEC',
+              2: '5 SEC',
+              3: '10 SEC',
+              4: '15 SEC',
+              5: '30 SEC',
+              6: '45 SEC',
+              7: '60 SEC',
+              8: '90 SEC'}
 
 # Dictionary Timelapse Duration
 duration_choices = {0: 60000,  # 01 minute
@@ -129,24 +129,24 @@ while True:
     display.show("A")
 
     if button_a.was_pressed():
-        display.scroll(show_time_intervals[menu_cycle], wait=False, loop=True)
+        display.scroll(show_times[menu_cycle], wait=False, loop=True)
 
         while True:
             if button_a.was_pressed():
-                menu_cycle = menu_cycler(menu_cycle, len(show_time_intervals))
+                menu_cycle = menu_cycler(menu_cycle, len(show_times))
                 time_interval = time_choices[menu_cycle]
-                display.scroll(show_time_intervals[menu_cycle], wait=False, loop=True)
+                display.scroll(show_times[menu_cycle], wait=False, loop=True)
                 continue
 
             if button_b.was_pressed():
                 menu_cycle = 0
                 break
 
-        display.scroll(show_durations[menu_cycle], wait=False)
+        display.scroll(show_durations[menu_cycle], wait=False, loop=True)
 
         while True:
             if button_a.was_pressed():
-                menu_cycle = menu_cycler(menu_cycle, len(show_time_intervals))
+                menu_cycle = menu_cycler(menu_cycle, len(show_durations))
                 total_time = duration_choices[menu_cycle]
                 display.scroll(show_durations[menu_cycle], wait=False, loop=True)
                 continue
