@@ -12,15 +12,15 @@ time_choices = {0: 1000,  # 01 second
                 8: 90000}  # 90 seconds
 
 # Dictionary Timelapse Interval Strings to Display
-show_time_intervals = {0: '1 second',
-                       1: '2 seconds',
-                       2: '5 seconds',
-                       3: '10 seconds',
-                       4: '15 seconds',
-                       5: '30 seconds',
-                       6: '45 seconds',
-                       7: '60 seconds',
-                       8: '90 seconds'}
+show_time_intervals = {0: '1 SEC',
+                       1: '2 SEC',
+                       2: '5 SEC',
+                       3: '10 SEC',
+                       4: '15 SEC',
+                       5: '30 SEC',
+                       6: '45 SEC',
+                       7: '60 SEC',
+                       8: '90 SEC'}
 
 # Dictionary Timelapse Duration
 duration_choices = {0: 60000,  # 01 minute
@@ -34,15 +34,15 @@ duration_choices = {0: 60000,  # 01 minute
                     8: 14400000}  # 04 hours
 
 # Dictionary Timelapse Duration Strings to Display
-show_durations = {0: '1 minute',
-                  1: '2 minutes',
-                  2: '5 minutes',
-                  3: '10 minutes',
-                  4: '15 minutes',
-                  5: '30 minutes',
-                  6: '1 hours',
-                  7: '2 hours',
-                  8: '4 hours'}
+show_durations = {0: '1 MIN',
+                  1: '2 MIN',
+                  2: '5 MIN',
+                  3: '10 MIN',
+                  4: '15 MIN',
+                  5: '30 MIN',
+                  6: '1 HOUR',
+                  7: '2 HOUR',
+                  8: '4 HOUR'}
 
 menu_cycle = -1  # to increment when searching dictionaries
 time_interval = -1  # how long to wait for timelapse
@@ -78,12 +78,17 @@ def take_photos(interval, total, panorama):
                 current_heading -= 360
             if current_heading >= angle:
                 pin0.write_digital(1)
+                sleep(50)
+                pin0.write_digital(0)
                 angle += interval
 
     else:
-        pin0.write_digital(1)
-        sleep(50)
-        pin0.write_digital(0)
+        pin0.write_digital(1)         # This is outside the loop so the function
+        sleep(50)                     # will start and stop immediately with a
+        pin0.write_digital(0)         # picture
+        display.show(Image.HAPPY)
+        sleep(5)
+        display.clear()
         for pic in range(photo_number - 1):
             sleep(interval)
             pin0.write_digital(1)
@@ -124,25 +129,26 @@ while True:
     display.show("A")
 
     if button_a.was_pressed():
+        display.scroll(show_time_intervals[menu_cycle], wait=False, loop=True)
 
         while True:
-            display.scroll(show_time_intervals[menu_cycle])
-
             if button_a.was_pressed():
                 menu_cycle = menu_cycler(menu_cycle, len(show_time_intervals))
                 time_interval = time_choices[menu_cycle]
+                display.scroll(show_time_intervals[menu_cycle], wait=False, loop=True)
                 continue
 
             if button_b.was_pressed():
                 menu_cycle = 0
                 break
 
-        while True:
-            display.scroll(show_durations[menu_cycle])
+        display.scroll(show_durations[menu_cycle], wait=False)
 
+        while True:
             if button_a.was_pressed():
                 menu_cycle = menu_cycler(menu_cycle, len(show_time_intervals))
                 total_time = duration_choices[menu_cycle]
+                display.scroll(show_durations[menu_cycle], wait=False, loop=True)
                 continue
 
             if button_b.was_pressed():
