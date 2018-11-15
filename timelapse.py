@@ -1,9 +1,9 @@
 from microbit import *
 
 # Dictionary Timelapse Interval
-time_choices = {0: 1000,  # 01 second
-                1: 3000,  # 02 seconds
-                2: 5000,  # 05 seconds
+time_choices = {0: 1000,   # 01 second
+                1: 3000,   # 02 seconds
+                2: 5000,   # 05 seconds
                 3: 10000,  # 10 seconds
                 4: 15000,  # 15 seconds
                 5: 30000,  # 30 seconds
@@ -23,14 +23,14 @@ show_times = {0: '1 SEC',
               8: '90 SEC'}
 
 # Dictionary Timelapse Duration
-duration_choices = {0: 60000,  # 01 minute
-                    1: 120000,  # 02 minutes
-                    2: 300000,  # 05 minutes
-                    3: 600000,  # 10 minutes
-                    4: 900000,  # 15 minutes
-                    5: 1800000,  # 30 minutes
-                    6: 3600000,  # 01 hours
-                    7: 7200000,  # 02 hours
+duration_choices = {0: 60000,     # 01 minute
+                    1: 120000,    # 02 minutes
+                    2: 300000,    # 05 minutes
+                    3: 600000,    # 10 minutes
+                    4: 900000,    # 15 minutes
+                    5: 1800000,   # 30 minutes
+                    6: 3600000,   # 01 hours
+                    7: 7200000,   # 02 hours
                     8: 14400000}  # 04 hours
 
 # Dictionary Timelapse Duration Strings to Display
@@ -40,9 +40,9 @@ show_durations = {0: '1 MIN',
                   3: '10 MIN',
                   4: '15 MIN',
                   5: '30 MIN',
-                  6: '1 HOUR',
-                  7: '2 HOUR',
-                  8: '4 HOUR'}
+                  6: '1 HR',
+                  7: '2 HR',
+                  8: '4 HR'}
 
 screen_filler = [Image("90000:"
                        "90000:"
@@ -82,59 +82,44 @@ total_time = -1  # running time for timelapse
 def take_photos(interval, total, panorama):
     photo_number = total // interval
 
-    # TODO Mock up part of Panorama Function
     # Panorama part
     if panorama:
         while True:
             display.scroll("A to set start point", wait=False, loop=True)
             if button_a.was_pressed():  # to reset initial position
                 hdg = compass.heading()
-                display.scroll("set")
+                display.scroll("Start SET pic in 3...2...1...")
                 i = 1
-                display.show(Image.HAPPY)
-                sleep(500)
-                display.clear()
+                camera_shutter()
                 while i in range(1, photo_number + 1):
-                    if button_a.was_pressed():
+                    if button_a.was_pressed():         # to cancel
                         i = -1
                         break
                     if compass.heading() - hdg < 0:
-                        correct = 360
-                    else:
-                        correct = 0
-                    if (compass.heading() - hdg + correct) > (total + interval):
+                        hdg += 360
+                    #  else:
+                        #  correct_compass = 0
+                    # For wiggle room if camera is turned the wrong way
+                    if (compass.heading() - hdg) > (total + interval):
                         display.show(Image.ARROW_E)
-                    elif (compass.heading() - hdg + correct) < (i * interval):
+                    elif (compass.heading() - hdg) < (i * interval):
                         display.show(i)
-                    elif (compass.heading() - hdg + correct) >= (i * interval):
+                    elif (compass.heading() - hdg) >= (i * interval):
                         i += 1
-                        display.show(Image.HAPPY)
-                        sleep(500)
-                        display.clear()
-                if i == (photo_number + 1):
-                    display.show(Image.HAPPY)
-                    sleep(500)
-                    display.clear()
-                    break
-                display.scroll("A to reset start", wait=False, loop=True)
+                        camera_shutter()
+                if i == photo_number + 1:
+                    pin0.write_digital(1)  # sets camera back to default
+                    return
+                else:
+                    display.scroll("A to reset start", wait=False, loop=True)
 
-    # Timelapse part
+    # Timelapse -starts and stops with picture-
     else:
-        pin0.write_digital(1)         # This is outside the loop so the function
-        sleep(50)                     # will start and stop immediately with a
-        pin0.write_digital(0)         # picture
-        display.show(Image.HAPPY)
-        sleep(5)
-        display.clear()
+        camera_shutter()
         for pic in range(photo_number - 1):
             sleep(interval)
-            pin0.write_digital(1)
-            sleep(50)
-            pin0.write_digital(0)
-            display.show(Image.HAPPY)
-            sleep(5)
-            display.clear()
-        pin0.write_digital(1)
+            camera_shutter()
+    pin0.write_digital(1)  # sets camera back to default
 
 #  TODO delete when above works
 #  def progress_bar(progress, divisions, increment, count):
@@ -146,9 +131,8 @@ def take_photos(interval, total, panorama):
 
 #  ------------------ Function to Increment Menu Number -----------------------
 #
-#                  This is super simple menu system
-#               to rotate through the dictionaries above.
-#  ----------------------------------------------------------------------------
+#                      This is super simple menu system
+#                   to rotate through the dictionaries above.
 
 
 def menu_cycler(cycle, end_point):
@@ -157,6 +141,18 @@ def menu_cycler(cycle, end_point):
     else:
         cycle += 1
     return cycle
+
+
+# -------------------- Send Shutter Signal to Camera ---------------------------
+
+
+def camera_shutter():
+    pin0.write_digital(1)
+    sleep(50)
+    pin0.write_digital(0)
+    display.show(Image.HAPPY)
+    sleep(350)
+    display.clear()
 
 
 #  ------------------------------- Main ---------------------------------------
