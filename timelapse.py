@@ -44,6 +44,27 @@ show_durations = {0: '1 MIN',
                   7: '2 HOUR',
                   8: '4 HOUR'}
 
+screen_filler = [Image("90000:"
+                       "90000:"
+                       "90000:"
+                       "90000:"
+                       "90000"),
+                 Image("99900:"
+                       "99900:"
+                       "99900:"
+                       "99900:"
+                       "99000"),
+                 Image("99990:"
+                       "99990:"
+                       "99990:"
+                       "99990:"
+                       "99990"),
+                 Image("99999:"
+                       "99999:"
+                       "99999:"
+                       "99999:"
+                       "99999")]
+
 menu_cycle = -1  # to increment when searching dictionaries
 time_interval = -1  # how long to wait for timelapse
 total_time = -1  # running time for timelapse
@@ -60,28 +81,42 @@ total_time = -1  # running time for timelapse
 
 
 def take_photos(interval, total, panorama):
-    photo_number = total // interval  # Loop Number
-    #   May be useful for panorama part but is needed for timelapse part
+    photo_number = total // interval
 
     # TODO Mock up part of Panorama Function
-    #    The code in the 'if' statements are just an idea of how
-    #    you might want to use the function. I don't know if this
-    #    part would even work the way it is.
     if panorama:
-        angle = 0
-        initial_heading = compass.heading()
-        while angle <= total:
-            current_heading = compass.heading() - initial_heading
-            if current_heading < 0:
-                current_heading += 360
-            if current_heading > 360:
-                current_heading -= 360
-            if current_heading >= angle:
-                pin0.write_digital(1)
-                sleep(50)
-                pin0.write_digital(0)
-                angle += interval
-
+        while True:
+            display.scroll("A to set start point", wait=False, loop=True)
+            if button_a.was_pressed():  # to reset initial position
+                hdg = compass.heading()
+                display.scroll("set")
+                i = 1
+                display.show(Image.HAPPY)
+                sleep(500)
+                display.clear()
+                while i in range(1, photo_number + 1):
+                    if button_a.was_pressed():
+                        i = -1
+                        break
+                    if compass.heading() - hdg < 0:
+                        correct = 360
+                    else:
+                        correct = 0
+                    if (compass.heading() - hdg + correct) > (total + interval):
+                        display.show(Image.ARROW_E)
+                    elif (compass.heading() - hdg + correct) < (i * interval):
+                        display.show(i)
+                    elif (compass.heading() - hdg + correct) >= (i * interval):
+                        i += 1
+                        display.show(Image.HAPPY)
+                        sleep(500)
+                        display.clear()
+                if i == (photo_number + 1):
+                    display.show(Image.HAPPY)
+                    sleep(500)
+                    display.clear()
+                    break
+                display.scroll("A to reset start", wait=False, loop=True)
     else:
         pin0.write_digital(1)         # This is outside the loop so the function
         sleep(50)                     # will start and stop immediately with a
@@ -99,6 +134,13 @@ def take_photos(interval, total, panorama):
             display.clear()
         pin0.write_digital(1)
 
+
+def progress_bar(progress, divisions, increment, count):
+    increment += divisions
+    if progress >= divisions:
+        display.show(screen_filler[count])
+        sleep(1000)
+    return increment
 
 #  ------------------ Function to Increment Menu Number -----------------------
 #
@@ -127,6 +169,11 @@ while True:
     total_time = duration_choices[menu_cycle]
 
     display.show("A")
+    if button_b.was_pressed():
+        compass.heading()
+        angle_total = 180
+        angle_interval = 45
+        take_photos(angle_interval, angle_total, True)
 
     if button_a.was_pressed():
         display.scroll(show_times[menu_cycle], wait=False, loop=True)
