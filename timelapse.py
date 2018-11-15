@@ -72,11 +72,10 @@ total_time = -1  # running time for timelapse
 
 #  -------------------- Function to Send Photo Pulses -------------------------
 #
-#          The use can hopefully be for both timelapse and panorama
+#                       For both timelapse and panorama
 #
 #                              The parameters
-#      take_photos(Interval, Full Panorama Angle/Total Time, True/False)
-#                For panorama use True. For timelapse use False
+#         Interval,  Total Angel/Time, True for Panorama/False for Timelapse
 #  ----------------------------------------------------------------------------
 
 
@@ -84,6 +83,7 @@ def take_photos(interval, total, panorama):
     photo_number = total // interval
 
     # TODO Mock up part of Panorama Function
+    # Panorama part
     if panorama:
         while True:
             display.scroll("A to set start point", wait=False, loop=True)
@@ -117,6 +117,8 @@ def take_photos(interval, total, panorama):
                     display.clear()
                     break
                 display.scroll("A to reset start", wait=False, loop=True)
+
+    # Timelapse part
     else:
         pin0.write_digital(1)         # This is outside the loop so the function
         sleep(50)                     # will start and stop immediately with a
@@ -134,20 +136,18 @@ def take_photos(interval, total, panorama):
             display.clear()
         pin0.write_digital(1)
 
-
-def progress_bar(progress, divisions, increment, count):
-    increment += divisions
-    if progress >= divisions:
-        display.show(screen_filler[count])
-        sleep(1000)
-    return increment
+#  TODO delete when above works
+#  def progress_bar(progress, divisions, increment, count):
+#     increment += divisions
+#     if progress >= divisions:
+#         display.show(screen_filler[count])
+#         sleep(1000)
+#     return increment
 
 #  ------------------ Function to Increment Menu Number -----------------------
 #
-#                  This is super simple placeholder menu
-#                system for the dictionaries above just for
-#                now more to test how the above function
-#                works or not
+#                  This is super simple menu system
+#               to rotate through the dictionaries above.
 #  ----------------------------------------------------------------------------
 
 
@@ -159,7 +159,7 @@ def menu_cycler(cycle, end_point):
     return cycle
 
 
-#  ---------------------------- Time Lapse Loop -------------------------------
+#  ------------------------------- Main ---------------------------------------
 #  ----------------------------------------------------------------------------
 
 
