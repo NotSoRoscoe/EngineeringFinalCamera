@@ -44,26 +44,44 @@ show_durations = {0: '1 MIN',
                   7: '2 HR',
                   8: '4 HR'}
 
-screen_filler = [Image("90000:"
-                       "90000:"
-                       "90000:"
-                       "90000:"
-                       "90000"),
-                 Image("99900:"
-                       "99900:"
-                       "99900:"
-                       "99900:"
-                       "99000"),
-                 Image("99990:"
-                       "99990:"
-                       "99990:"
-                       "99990:"
-                       "99990"),
-                 Image("99999:"
-                       "99999:"
-                       "99999:"
-                       "99999:"
-                       "99999")]
+angle_choices = {0: 5,
+                 1: 10,
+                 2: 15,
+                 3: 20,
+                 4: 25,
+                 5: 30,
+                 6: 35,
+                 7: 40,
+                 8: 45}
+
+show_angles = {0: '5 degrees',
+               1: '10 degrees',
+               2: '15 degrees',
+               3: '20 degrees',
+               4: '25 degrees',
+               5: '30 degrees',
+               6: '35 degrees',
+               7: '40 degrees',
+               8: '45 degrees'}
+
+total_choices = {0: 45,
+                 1: 60,
+                 2: 90,
+                 3: 100,
+                 4: 115,
+                 5: 130,
+                 6: 150,
+                 7: 180}
+
+show_totals = {0: "45 degrees",
+               1: "60 degrees",
+               2: "90 degrees",
+               3: "100 degrees",
+               4: "115 degrees",
+               5: "130 degrees",
+               6: "150 degrees",
+               7: "180 degrees"}
+
 
 menu_cycle = -1  # to increment when searching dictionaries
 time_interval = -1  # how long to wait for timelapse
@@ -84,27 +102,25 @@ def take_photos(interval, total, panorama):
 
     # Panorama part
     if panorama:
+        display.scroll("A to set", wait=False, loop=True)
         while True:
-            display.scroll("A to set start point", wait=False, loop=True)
             if button_a.was_pressed():  # to reset initial position
                 hdg = compass.heading()
-                display.scroll("Start SET pic in 3...2...1...")
+                display.scroll("Start in 3...2...1...")
                 i = 1
                 camera_shutter()
                 while i in range(1, photo_number + 1):
                     if button_a.was_pressed():         # to cancel
-                        i = -1
                         break
                     if compass.heading() - hdg < 0:
-                        hdg += 360
-                    #  else:
-                        #  correct_compass = 0
-                    # For wiggle room if camera is turned the wrong way
-                    if (compass.heading() - hdg) > (total + interval):
+                        correct = 360
+                    else:
+                        correct = 0
+                    if (compass.heading() - hdg + correct) > (total + interval):
                         display.show(Image.ARROW_E)
-                    elif (compass.heading() - hdg) < (i * interval):
+                    elif (compass.heading() - hdg + correct) < (i * interval):
                         display.show(i)
-                    elif (compass.heading() - hdg) >= (i * interval):
+                    elif (compass.heading() - hdg + correct) >= (i * interval):
                         i += 1
                         camera_shutter()
                 if i == photo_number + 1:
@@ -121,18 +137,7 @@ def take_photos(interval, total, panorama):
             camera_shutter()
     pin0.write_digital(1)  # sets camera back to default
 
-#  TODO delete when above works
-#  def progress_bar(progress, divisions, increment, count):
-#     increment += divisions
-#     if progress >= divisions:
-#         display.show(screen_filler[count])
-#         sleep(1000)
-#     return increment
-
 #  ------------------ Function to Increment Menu Number -----------------------
-#
-#                      This is super simple menu system
-#                   to rotate through the dictionaries above.
 
 
 def menu_cycler(cycle, end_point):
@@ -156,20 +161,49 @@ def camera_shutter():
 
 
 #  ------------------------------- Main ---------------------------------------
-#  ----------------------------------------------------------------------------
 
-
+display.scroll('A Timelapse B Panorama', wait=False, loop=True)
 while True:
     menu_cycle = 0
     time_interval = time_choices[menu_cycle]
     total_time = duration_choices[menu_cycle]
+    angle_interval = angle_choices[menu_cycle]
+    total_angle = total_choices[menu_cycle]
 
     display.show("A")
     if button_b.was_pressed():
         compass.heading()
-        angle_total = 180
-        angle_interval = 45
-        take_photos(angle_interval, angle_total, True)
+        display.scroll(show_angles[menu_cycle], wait=False, loop=True)
+
+        while True:
+            if button_a.was_pressed():
+                menu_cycle = menu_cycler(menu_cycle, len(show_angles))
+                angle_interval = angle_choices[menu_cycle]
+                display.scroll(show_angles[menu_cycle], wait=False, loop=True)
+                continue
+
+            if button_b.was_pressed():
+                menu_cycle = 0
+                break
+
+        display.scroll(show_totals[menu_cycle], wait=False, loop=True)
+
+        while True:
+            if button_a.was_pressed():
+                menu_cycle = menu_cycler(menu_cycle, len(show_totals))
+                total_angle = total_choices[menu_cycle]
+                display.scroll(show_totals[menu_cycle], wait=False, loop=True)
+                continue
+
+            if button_b.was_pressed():
+                break
+
+        while True:
+            take_photos(angle_interval, total_angle, True)
+            display.scroll("ALL DONE")
+            display.clear()
+            sleep(1000)
+            break
 
     if button_a.was_pressed():
         display.scroll(show_times[menu_cycle], wait=False, loop=True)
