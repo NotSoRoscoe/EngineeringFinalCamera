@@ -162,8 +162,9 @@ def camera_shutter():
 
 #  ------------------------------- Main ---------------------------------------
 
-display.scroll('A Timelapse B Panorama', wait=False, loop=True)
+
 while True:
+    display.scroll('A Time B Pano')
     menu_cycle = 0
     time_interval = time_choices[menu_cycle]
     total_time = duration_choices[menu_cycle]
