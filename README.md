@@ -1,6 +1,6 @@
 # Engineering Final PanoLapse
 
-#### Project Title 
+#### Project Title <br>
 PanoLapse
 
 ####Team 
@@ -24,7 +24,7 @@ Design Describe your design briefly and reference any supporting materials
 in the assets folder. Talk about input, output, processing, and storage 
 (aka memory) in your design.
 
-Most of the code is nested While loops that keep it all separate 
+Most of the code is nested while loops that keep it all separate 
 and organized this does cause the problem of not being able to back up but 
 it works quite well input is just the buttons A and B, Output consists of
 both the LEDs on the 5x5 screen and a small pulse that makes the camera take
@@ -55,7 +55,7 @@ Calvin made a presentation and tried to go into detail about it with the
 hardware we then answered questions based on it and the demo itself went really
 well we got it working and were able to show off the basics of it functionality
 
-!(20181126_192613.jpg)
+!(https://github.com/NotSoRoscoe/EngineeringFinalCamera/blob/master/assets/20181126_192613.jpg)
 
 #### Summary
 
