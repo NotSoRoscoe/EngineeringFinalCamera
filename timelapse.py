@@ -83,17 +83,12 @@ show_totals = {0: "45 degrees",
                7: "180 degrees"}
 
 
-menu_cycle = -1  # to increment when searching dictionaries
-time_interval = -1  # how long to wait for timelapse
-total_time = -1  # running time for timelapse
-
-
 #  -------------------- Function to Send Photo Pulses -------------------------
 #
 #                       For both timelapse and panorama
 #
 #                              The parameters
-#         Interval,  Total Angel/Time, True for Panorama/False for Timelapse
+#         Interval,  Total Angel/Time, True for Panorama / False for Timelapse
 #  ----------------------------------------------------------------------------
 
 
@@ -171,7 +166,6 @@ while True:
     angle_interval = angle_choices[menu_cycle]
     total_angle = total_choices[menu_cycle]
 
-    display.show("A")
     if button_b.was_pressed():
         compass.heading()
         display.scroll(show_angles[menu_cycle], wait=False, loop=True)
