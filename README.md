@@ -3,9 +3,12 @@ Engineering Final PanoLapse
 
 #### Project Title <br>
 PanoLapse
+___
 
 #### Team 
 Calvin Mack, Roscoe Welch, Braden Parks
+
+___
 
 #### Project Objective 
 
@@ -15,12 +18,17 @@ The micro:bit capabilities used were primarily the compass and internal timer. T
 allowed us to actually pull off the panorama(compass) and the time
 lapse(timer). Pin0 was also used to send a signal for the camera shutter.
 
+___
+
 #### Sources
 
 https://microbit.org/guide/python/ <br>
 http://docs.micropython.org/en/latest/ <br>
 https://microbit-micropython.readthedocs.io/en/latest/tutorials/io.html <br>
 https://www.instructables.com/id/How-to-build-a-shutter-release-cable-for-the-Canon/ <br>
+
+
+___
 
 #### Design
 Describe your design briefly and reference any supporting materials
@@ -52,6 +60,8 @@ Calvin created a sleeve to attach the micro:bit to
 the camera. This prevents the camera's hotshoe from interfering with the micro:bit
 as well as keep it attached to the camera, preventing any dangling of the micro:bit.
 
+___
+
 #### Development 
 
 * Initial plan was each person focused on different sections. Roscoe was
@@ -82,7 +92,7 @@ Scale was 0-1023. 1023 = 3.3 volts.
 cord. Had to send a high signal afterward.
 
 
-
+___
  
 
 #### Testing Describe your testing approach. What was successful and what failed?
@@ -93,6 +103,8 @@ new ways to think about it Tinkering and trial and error were also great ways to
 think about things differently Braden had a lot of tinkering going on and 
 constantly had to scrap code.
 
+___
+
 #### Demo
 
 Calvin made a presentation and tried to go into detail about it with the
@@ -102,6 +114,8 @@ well we got it working and were able to show off the basics of it functionality
 ![](https://github.com/NotSoRoscoe/EngineeringFinalCamera/blob/master/assets/20181126_192613.jpg)
 
 ![](https://github.com/NotSoRoscoe/EngineeringFinalCamera/blob/master/assets/20181126_192710.jpg)
+
+____
 
 #### Summary
 
