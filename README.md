@@ -55,7 +55,7 @@ Calvin made a presentation and tried to go into detail about it with the
 hardware we then answered questions based on it and the demo itself went really
 well we got it working and were able to show off the basics of it functionality
 
-!(https://github.com/NotSoRoscoe/EngineeringFinalCamera/blob/master/assets/20181126_192613.jpg)
+![](https://github.com/NotSoRoscoe/EngineeringFinalCamera/blob/master/assets/20181126_192613.jpg)
 
 #### Summary
 
